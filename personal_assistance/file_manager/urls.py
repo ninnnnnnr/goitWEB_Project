@@ -1,12 +1,13 @@
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('file_manager/', include('file_manager.urls')),
+    path('', views.FileManager.as_view(), name='file_manager'),
+    path('upload/', views.upload, name='upload'),
+
 ]
 
 if settings.DEBUG:
