@@ -5,8 +5,8 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.FileManager.as_view(), name='file_manager'),
-    path('upload/', views.upload, name='upload'),
+    path('', views.upload_file, name='file_list'),
+    path('files/<int:pk>/', views.delete_file, name='delete_file'),
 
 ]
 

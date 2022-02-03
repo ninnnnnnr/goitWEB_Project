@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+    <h2>Upload file</h2>
+    <form method="post" enctype="multipart/form-data" class="btn btn-primary">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Upload file</button>
+    </form>
+    </div>
+    <form method="post" enctype="multipart/form-data" class="btn">
+        {% csrf_token %}
+        <p>Sorted by:<select name="file_categories" class="filter-selectbox">
+        {% for key, value in type_files.items %}
+            <option value="{{ value }}">{{ value }}</option>
+        {% endfor %}</select>
+        <button type="submit">Select</button></p>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Upload date</th>
+                <th>Comment</th>
+                <th>Url</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+                <tr>
+                    <td>{{ file.name }}</td>
+                    <td>{{ file.get_type_display }}</td>
+                    <td>{{ file.date_upload }}</td>
+                    <td>{{ file.comment }}</td>
+                    <td>
+                        {% if file.url %}
+                            <a href="{{ file.url.url }}" class="btn btn-primary">Download</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'delete_file' file.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

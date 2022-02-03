@@ -1,17 +1,44 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-from django.core.files.storage import FileSystemStorage
+from django.shortcuts import render, redirect
+from .forms import FileForm
+from .models import File
 
 
-class FileManager(TemplateView):
-    template_name = 'file_manager.html'
+TYPES_FILE = {'all': 'All',
+              'doc': 'Documents',
+              'tb': 'Tables',
+              'zip': 'Archives',
+              'img': 'Images',
+              'mp3': 'Audio',
+              'avi': 'Video',
+              'dr': 'Other'}
 
 
-def upload(request):
-    context = {}
+def delete_file(request, pk):
     if request.method == 'POST':
-        uploaded_file = request.FILES['document']
-        file_system = FileSystemStorage()
-        name = file_system.save(uploaded_file.name, uploaded_file)
-        context['url'] = file_system.url(name)
-    return render(request, 'upload.html', context)
+        file = File.objects.get(pk=pk)
+        file.delete()
+    return redirect('file_list')
+
+
+def upload_file(request):
+    files = File.objects.all()
+    type_files = TYPES_FILE
+    files_select = request.POST.get('file_categories', 'All')
+    if request.method == 'POST':
+        form = FileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('file_list')
+    else:
+        form = FileForm()
+    if files_select == 'All':
+        files = File.objects.all()
+        form = FileForm()
+    else:
+        files = File.objects.filter(type=(list(type_files.keys())[list(type_files.values()).index(files_select)]))
+        form = FileForm()
+    return render(request, 'file_list.html', {
+        'form': form,
+        'files': files,
+        'type_files': type_files,
+    })
