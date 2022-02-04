@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  DeleteView, CustomLoginView, RegisterPage, Notes, Detail, NoteCreate, NoteDelete, NoteUpdate
+from .views import CustomLoginView, RegisterPage, Notes, Detail, NoteCreate, NoteDelete, NoteUpdate
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
