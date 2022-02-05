@@ -8,7 +8,9 @@
 
 <form action="" method="POST">
   {% csrf_token %}
-  <input type="submit" value="Yes, delete." />
+  <input class="btn btn-success" type="submit" value="Yes, delete." />
+  <input class="btn btn-secondary" type="submit" name = "cancel" value="Cancel" />
+  
 </form>
 
 {% endblock %}
