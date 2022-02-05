@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -16,6 +17,8 @@ class File(models.Model):
     type = models.CharField('Type file', max_length=3, choices=TYPES_FILE, default='dr')
     date_upload = models.DateTimeField(auto_now_add=True)
     url = models.FileField(upload_to='media/')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
 
     def __str__(self):
         return self.name

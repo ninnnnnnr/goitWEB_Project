@@ -1,23 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div>
-    <h2>Upload file</h2>
-    <form method="post" enctype="multipart/form-data" class="btn btn-primary">
+    <h2 style="text-align:center; font-family:MV Boli;">Upload file</h2>
+    <div class="form-control" style="background-color: hsl(0.15turn, 50%, 75%)">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form }}
         <button type="submit">Upload file</button>
     </form>
     </div>
-    <form method="post" enctype="multipart/form-data" class="btn">
+    <div>
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <p>Sorted by:<select name="file_categories" class="filter-selectbox">
         {% for key, value in type_files.items %}
             <option value="{{ value }}">{{ value }}</option>
         {% endfor %}</select>
-        <button type="submit">Select</button></p>
+        <button type="submit" class="btn btn-info btn-sm">Select</button></p>
     </form>
+    </div>
 
-    <table class="table">
+    <table class="table" style="background-color: hsl(0.15turn, 50%, 90%)">
         <thead>
             <tr>
                 <th>Name</th>
@@ -37,13 +39,13 @@
                     <td>{{ file.comment }}</td>
                     <td>
                         {% if file.url %}
-                            <a href="{{ file.url.url }}" class="btn btn-primary">Download</a>
+                            <a href="{{ file.url.url }}" class="btn btn-dark btn-sm">Download</a>
                         {% endif %}
                     </td>
                     <td>
                         <form method="post" action="{% url 'delete_file' file.pk %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     </td>
                 </tr>

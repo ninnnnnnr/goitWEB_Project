@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Main page
+{% endblock %}
+
+{% block content %}
+    <div style="margin:0 auto" align=right>
+        <form method="get" action="/notes/create">
+            <button type="submit" class="btn btn-success">Create a new note</button>
+        </form>
+    </div>
+    <hr>
+  {% if notes %}
+    <h2 style="text-align:center; font-family:MV Boli;"> The last notes list:</h2>
+    <div class="form-control" style="background-color: hsl(0.15turn, 50%, 75%)">
+        <form method=GET>
+            {% csrf_token %}
+
+                <label for="scope">Select scope by author: </label>
+                <select name="scope" id="scope">
+                    <option selected="selected" value="current">current</option>
+                    <option value="all">all</option>
+                </select>
+
+
+
+                <label for="filter">Search in: </label>
+                <select name="filter" id="filter">
+                    <option  selected="selected" value="text">text</option>
+                    <option value="tags">tags</option>
+                </select>
+
+
+                <label for="search">Search: </label>
+                <input type="text" id="search" name="search" placeholder="Search"/>
+
+            <button type="submit" class="btn btn-info btn-sm">Submit</button>
+        </form>
+
+    </div>
+
+            <table class="table" style="background-color: hsl(0.15turn, 50%, 90%)">
+                <thead>
+              <tr>
+                <th>Title</th>
+                <th>Created</th>
+                <th>Update</th>
+                <th>Delete</th>
+              </tr>
+              <thead>
+                {% for el in notes %}
+                  <tr>
+                     <td style="font-family:MV Boli;"> <h3><a href="{% url 'detail' el.pk %}">{{el}}</a></h3></td>
+                     <td><i>By {{el.author}} at {{el.created}}</i></td>
+                     <td>
+                         <form method="get" action="{% url 'update' el.pk %}">
+                            <button type="submit" class="btn btn-dark btn-sm">Update</button>
+                         </form>
+                     </td>
+                     <td>
+                         <form method="get" action="{% url 'delete' el.pk %}">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                         </form>
+                     </td>
+                   </tr>
+                {% endfor %}
+            </table>
+
+
+
+    {% else %}
+        <h4 style="text-align:center"> There is no records in the database </h4>
+
+    {% endif %}
+{% endblock %}
