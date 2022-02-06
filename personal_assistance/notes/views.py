@@ -83,7 +83,7 @@ class Notes(LoginRequiredMixin, ListView):
             A set of all notes in the database
     """
     model = Note
-    context_object_name = 'notes'
+    context_object_name = 'all_records'
     template_name = 'notes/notes.html'
 
     def get_context_data(self, **kwargs):
@@ -93,30 +93,29 @@ class Notes(LoginRequiredMixin, ListView):
         :return: 'proceeded content'
         """
         context = super().get_context_data(**kwargs)
-        context['notes'] = context['notes'].order_by('-created')
-        context['notes_by_author'] = context['notes'].filter(author=self.request.user).order_by('-created')
-
+        context['all_records'] = context['all_records'].order_by('-created')
+        context['notes_by_author'] = context['all_records'].filter(author=self.request.user).order_by('-created')
+        context['notes'] = context['notes_by_author']
         search_input = self.request.GET.get('search') or ''  # getting chosen options
         scope = self.request.GET.get('scope')  # getting chosen options
         input_filter = self.request.GET.get('filter')  # getting chosen options
         if search_input and scope == 'all':  # search for all authors
             if input_filter == "text":  # search for all authors in texts
-                context['notes'] = context['notes'].filter(text__icontains=search_input).order_by('-created')
+                context['notes'] = context['all_records'].filter(text__icontains=search_input).order_by('-created')
             else:  # search for all authors in tags
-                context['notes'] = context['notes'].filter(tags__icontains=search_input).order_by('-created')
+                context['notes'] = context['all_records'].filter(tags__icontains=search_input).order_by('-created')
         elif search_input and scope == 'current':  # search for current author
             if input_filter == "text":  # search for current author in texts
                 context['notes'] = context['notes_by_author'].filter(text__icontains=search_input).order_by('-created')
             else:  # search for current author in tags
                 context['notes'] = context['notes_by_author'].filter(tags__icontains=search_input).order_by('-created')
         else:
-            if scope == "current":  # default notes list set for current user
-                context['notes'] = context['notes_by_author']
+            if scope == "all":  # default notes list set for all user
+                context['notes'] = context['all_records']
         context['notes'] = context['notes'][:10]  # limiting number of notes to 10 on the page
         context['search_input'] = search_input
         context['scope'] = scope
         context['input_filter'] = input_filter
-
         return context
 
 

@@ -12,25 +12,22 @@ Main page
     </div>
     <hr>
   {% if notes %}
-    <h2 style="text-align:center; font-family:MV Boli;"> The last notes list:</h2>
+    <h2 style="text-align:center; font-family:MV Boli;"> Notes list:</h2>
     <div class="form-control" style="background-color: hsl(0.15turn, 50%, 75%)">
         <form method=GET>
             {% csrf_token %}
 
-                <label for="scope">Select scope by author: </label>
+                <label for="scope">Scope of authors: </label>
                 <select name="scope" id="scope">
                     <option selected="selected" value="current">current</option>
                     <option value="all">all</option>
                 </select>
-
-
 
                 <label for="filter">Search in: </label>
                 <select name="filter" id="filter">
                     <option  selected="selected" value="text">text</option>
                     <option value="tags">tags</option>
                 </select>
-
 
                 <label for="search">Search: </label>
                 <input type="text" id="search" name="search" placeholder="Search"/>
@@ -39,7 +36,6 @@ Main page
         </form>
 
     </div>
-
             <table class="table" style="background-color: hsl(0.15turn, 50%, 90%)">
               <tr>
                 <th>Title</th>
@@ -52,20 +48,26 @@ Main page
                      <td style="font-family:MV Boli;"> <h3><a href="{% url 'detail' el.pk %}">{{el}}</a></h3></td>
                      <td><i>By {{el.author}} at {{el.created}}</i></td>
                      <td>
+                         {% if el.author == request.user %}
                          <form method="get" action="{% url 'update' el.pk %}">
                             <button type="submit" class="btn btn-dark btn-sm">Update</button>
                          </form>
+                         {% else %}
+                         <p style="color:red;">For authorised authors only </p>
+                         {% endif %}
                      </td>
                      <td>
+                         {% if el.author == request.user %}
                          <form method="get" action="{% url 'delete' el.pk %}">
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                          </form>
+                         {% else %}
+                         <p style="color:red;">For authorised authors only </p>
+                         {% endif %}
                      </td>
                    </tr>
                 {% endfor %}
             </table>
-
-
 
     {% else %}
         <h4 style="text-align:center"> There is no records in the database </h4>
