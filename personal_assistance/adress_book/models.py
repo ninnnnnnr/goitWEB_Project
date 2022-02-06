@@ -5,6 +5,8 @@ from django.urls import reverse
 
 
 class Contact(models.Model):
+    '''Address Book model which contains all contacts and information about them.
+    Save to database name of the contact, it's phone number, address, email and birthday date.'''
 
     name = models.CharField(max_length=20)
     address = models.CharField(max_length=30, null=True)
@@ -19,6 +21,7 @@ class Contact(models.Model):
 
     
     def get_absolute_url(self):
+        '''Return absolute url to each contacts information'''
         return reverse('contact-detail', args= [str(self.id)])
 
     

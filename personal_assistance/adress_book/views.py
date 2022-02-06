@@ -1,4 +1,4 @@
-from django.shortcuts import render
+#from django.shortcuts import render
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -11,19 +11,27 @@ from datetime import datetime, timedelta
 
 
 class ContactListView(generic.ListView):
+    '''Allow us to generate list of contacts and pass it to 'contact_list.html'.'''
+
     model = Contact
     paginate_by = 40
 
 
 class ContactDetailView(generic.DetailView):
+    '''Take id of the contact and show specified contact info.'''
+
     model = Contact
 
 class AddContact(CreateView):
+    '''Generate form for user input and check if it is valid.'''
+
     model = Contact
     fields = '__all__'
     success_url = reverse_lazy('contacts')
 
     def form_valid(self, form):
+        '''Check if phone number is valid, because field phone is 'charfield' and may contain a letter'''
+
         pattern = r'\d{12}'
         if not re.fullmatch(pattern, form.cleaned_data['phone']):
             form.add_error('phone', 'Phone number should contain only digits')
@@ -32,10 +40,14 @@ class AddContact(CreateView):
 
 
 class UpdateContact(UpdateView):
+    '''Generate form for update user input and check if it is valid.'''
+
     model = Contact
     fields = '__all__'
 
     def form_valid(self, form):
+        '''Check if phone number is valid, because field phone is 'charfield' and may contain a letter'''
+
         pattern = r'\d{12}'
         if not re.fullmatch(pattern, form.cleaned_data['phone']):
             form.add_error('phone', 'Phone number should contain only digits')
@@ -44,6 +56,8 @@ class UpdateContact(UpdateView):
 
 
 class DeleteContact(DeleteView):
+    '''Take value from input form and contact id. If it's cancel return to 'contacts' page or delete contact with this id otherwise.'''
+
     model = Contact
     success_url = reverse_lazy('contacts')
 
@@ -56,10 +70,13 @@ class DeleteContact(DeleteView):
 
 
 class SearchResultsView(generic.ListView):
+    '''Take query from input form and generate list of searched contacts.'''
+
     model = Contact
-    #template_name = 'adress_book/search_results.html'
+    
  
-    def get_queryset(self): # новый
+    def get_queryset(self): 
+        '''Take query and return suitable queryset'''
         query = self.request.GET.get('q')
         object_list = Contact.objects.filter(
             Q(name__icontains=query) | Q(phone__icontains=query) | Q(email__icontains=query)
@@ -68,10 +85,13 @@ class SearchResultsView(generic.ListView):
 
 
 class DaysToBirthdayResultsView(generic.ListView):
+    '''Take number of days from input form and generate list of searched contacts with birthday in needed date.'''
+
     model = Contact
-    #template_name = 'adress_book/days_to_birthday_results.html'
+    
  
-    def get_queryset(self): # новый
+    def get_queryset(self): 
+        '''Take query and return suitable queryset'''
         query = self.request.GET.get('q1')
         today = datetime.now().date()
         needed = today + timedelta(days=int(query))
