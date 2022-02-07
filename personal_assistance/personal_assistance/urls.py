@@ -9,6 +9,7 @@ urlpatterns = [
     path('file_manager/', include('file_manager.urls')),
     path('notes/', include('notes.urls')),
     path('adress_book/', include('adress_book.urls')),
+    path('', include("news.urls")),
 ]
 
 if settings.DEBUG:

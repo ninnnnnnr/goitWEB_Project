@@ -4,19 +4,19 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
-#'django-insecure-=vo_@tp#qx1z*7qdzej_i$^1=jvxvm#y7k^&g5v0m-%(a)!ur9'
+#SECRET_KEY = 'django-insecure-=vo_@tp#qx1z*7qdzej_i$^1=jvxvm#y7k^&g5v0m-%(a)!ur9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=0))
+#DEBUG = True
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-
+# ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'notes.apps.NotesConfig',
     'file_manager.apps.FileManagerConfig',
     'adress_book.apps.AdressBookConfig',
+    'news.apps.NewsConfig',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +62,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'personal_assistance.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -101,7 +101,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -112,7 +111,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -126,3 +124,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 LOGIN_URL = '/notes/login/'
+
+# APIKEY = "7cf4a02de9624525883b2e95ce459ec6"
+APIKEY = os.environ.get("SQL_PORT")
