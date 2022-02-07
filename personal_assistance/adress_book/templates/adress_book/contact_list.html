@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Address book
+{% endblock %}
+
+{% block content %}
+    <div style="margin:0 auto" align=right>
+            <a href="{% url 'add_contact' %}"><button class="btn btn-success">Add contact</button></a>
+    </div>
+    <hr>
+<h2 style="text-align:center; font-family:MV Boli;"> Address book</h2>
+<div class="form-control" style="background-color: hsl(0.15turn, 50%, 75%); float: left;">
+<form action="{% url 'search_results' %}" method="get" enctype="multipart/form-data" style="float: left;">
+    <label>Search: </label>
+  <input name="q" type="text" placeholder="Search">
+</form>
+<form action="{% url 'days_to_birthday_results' %}" method="get" enctype="multipart/form-data" style="float: right;">
+  <label>Search by birthday: </label>
+    <input name="q1" type="number" placeholder="Days to birthday: yyyy-mm-dd">
+</form>
+</div>
+{% if contact_list %}
+<table class="table" style="background-color: hsl(0.15turn, 50%, 90%)">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Author</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+  <tbody>
+      {% for contact in all_records %}
+          <tr>
+              <td><a href="{{ contact.get_absolute_url }}">{{contact.name}}</a></td>
+              <td>{{contact.author}}</td>
+              <td><a href="{% url 'update_contact' contact.pk %}">Update</a></td>
+              <td><a href="{% url 'delete_contact' contact.pk %}">Delete</a></td>
+              
+          </tr>
+      {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <p>There are no contacts in address book.</p>
+{% endif %} 
+{% endblock %}
+

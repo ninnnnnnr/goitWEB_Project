@@ -22,7 +22,7 @@ class CustomLoginView(LoginView):
 
     :template:'notes/login.html'
     """
-    template_name = 'notes/login.html'
+    template_name = 'login.html'
     fields = '__all__'
     redirect_authenticated_user = True
 
@@ -41,7 +41,7 @@ class RegisterPage(FormView):
 
         :template:'notes/register.html'
         """
-    template_name = 'notes/register.html'
+    template_name = 'register.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('notes')
@@ -84,7 +84,7 @@ class Notes(LoginRequiredMixin, ListView):
     """
     model = Note
     context_object_name = 'all_records'
-    template_name = 'notes/notes.html'
+    template_name = 'notes.html'
 
     def get_context_data(self, **kwargs):
         """
@@ -96,6 +96,7 @@ class Notes(LoginRequiredMixin, ListView):
         context['all_records'] = context['all_records'].order_by('-created')
         context['notes_by_author'] = context['all_records'].filter(author=self.request.user).order_by('-created')
         context['notes'] = context['notes_by_author']
+
         search_input = self.request.GET.get('search') or ''  # getting chosen options
         scope = self.request.GET.get('scope')  # getting chosen options
         input_filter = self.request.GET.get('filter')  # getting chosen options
@@ -116,6 +117,7 @@ class Notes(LoginRequiredMixin, ListView):
         context['search_input'] = search_input
         context['scope'] = scope
         context['input_filter'] = input_filter
+
         return context
 
 
@@ -124,11 +126,11 @@ class Detail(LoginRequiredMixin, DetailView):
     Display the note in detail
     """
     model = Note
-    template_name = "notes/detail.html"
+    template_name = "detail.html"
 
     def book_detail_view(request, primary_key):
         note = get_object_or_404(Note, pk=primary_key)  # getting the note record from the database
-        return render(request, 'notes/detail.html', context={'note': note})
+        return render(request, 'detail.html', context={'note': note})
 
 
 class NoteCreate(LoginRequiredMixin, CreateView):
@@ -138,6 +140,7 @@ class NoteCreate(LoginRequiredMixin, CreateView):
     model = Note
     fields = ['title', 'text', 'tags']
     success_url = reverse_lazy('notes')
+    template_name = "note_form.html"
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # getting authenticated user's name as 'author' for the note
@@ -151,6 +154,7 @@ class NoteUpdate(LoginRequiredMixin, UpdateView):
     model = Note
     fields = ['title', 'text', 'tags']
     success_url = reverse_lazy('notes')
+    template_name = "note_form.html"
 
 
 class NoteDelete(LoginRequiredMixin, DeleteView):
@@ -160,5 +164,5 @@ class NoteDelete(LoginRequiredMixin, DeleteView):
     model = Note
     context_object_name = 'note'
     success_url = reverse_lazy('notes')
-    template_name = 'notes/delete.html'
+    template_name = 'delete.html'
 
