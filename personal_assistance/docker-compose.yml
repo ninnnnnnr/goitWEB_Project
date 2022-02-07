@@ -13,11 +13,13 @@ services:
       - db
   db:
     image: postgres:12.0-alpine
+    restart: always
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - ./postgres-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=hello_django
       - POSTGRES_PASSWORD=hello_django
       - POSTGRES_DB=hello_django_dev
 volumes:
-  postgres_data:
+  db:
+    driver: local

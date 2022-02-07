@@ -125,5 +125,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 LOGIN_URL = '/notes/login/'
 
-# APIKEY = "7cf4a02de9624525883b2e95ce459ec6"
-APIKEY = os.environ.get("SQL_PORT")
+APIKEY = "7cf4a02de9624525883b2e95ce459ec6"
+#APIKEY = os.environ.get("SQL_PORT")
