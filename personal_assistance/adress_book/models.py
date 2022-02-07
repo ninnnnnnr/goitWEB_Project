@@ -1,6 +1,7 @@
 import email
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class Contact(models.Model):
@@ -12,6 +13,7 @@ class Contact(models.Model):
     email = models.EmailField(null=True)
     phone = models.CharField(max_length=12)
     birthday = models.DateField(null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)  # author is taken from authenticated user
 
     def __str__(self):
         return f'{self.name} has number {self.phone}'

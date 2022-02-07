@@ -25,7 +25,7 @@ Address book
     <thead>
     <tr>
         <th>Name</th>
-        <th>Phone</th>
+        <th>Birthday</th>
         <th>Update</th>
         <th>Delete</th>
     </tr>
@@ -34,16 +34,16 @@ Address book
       {% for contact in contact_list %}
           <tr>
               <td><a href="{{ contact.get_absolute_url }}">{{contact.name}}</a></td>
-              <td>{{ contact.phone }}</td>
-              <td><a href="{% url 'update_contact' contact.pk %}">Update</a></td>
-              <td><a href="{% url 'delete_contact' contact.pk %}">Delete</a></td>
-              
+              <td>{{ contact.birthday }}</td>
+              <td><a href="{% url 'update_contact' contact.pk %}"><button type="submit" class="btn btn-dark btn-sm">Update</button></a></td>
+              <td><a href="{% url 'delete_contact' contact.pk %}"><button type="submit" class="btn btn-danger btn-sm">Delete</button></a></td>
+
           </tr>
       {% endfor %}
   </tbody>
 </table>
 {% else %}
   <p>There are no contacts in address book.</p>
-{% endif %} 
+{% endif %}
 {% endblock %}
 

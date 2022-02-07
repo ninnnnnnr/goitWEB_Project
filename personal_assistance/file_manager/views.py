@@ -16,6 +16,9 @@ TYPES_FILE = {'all': 'All',
 
 @login_required(redirect_field_name='file_list')
 def delete_file(request, pk):
+    """
+    This function is responsible for deleting the record from the database, as well as the file itself.
+    """
     if request.method == 'POST':
         file = File.objects.get(pk=pk)
         file.delete()
@@ -24,6 +27,9 @@ def delete_file(request, pk):
 
 @login_required(redirect_field_name='file_list')
 def upload_file(request):
+    """
+    this function is responsible for uploading files to the service and displaying them.
+    """
     files = File.objects.filter(author=request.user)
     type_files = TYPES_FILE
     files_select = request.POST.get('file_categories', 'All')

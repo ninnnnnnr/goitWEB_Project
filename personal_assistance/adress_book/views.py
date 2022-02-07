@@ -1,6 +1,6 @@
-# from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
+from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -11,11 +11,19 @@ import re
 from datetime import datetime, timedelta
 
 
-class ContactListView(LoginRequiredMixin, generic.ListView):
+class ContactListView(LoginRequiredMixin, ListView):
     '''Allow us to generate list of contacts and pass it to 'contact_list.html'.'''
 
     model = Contact
     paginate_by = 40
+
+    def get_context_data(self, **kwargs):
+        """
+        Proceed context data in respect to authorised user
+        """
+        context = super().get_context_data(**kwargs)
+        context['all_records'] = Contact.objects.filter(author=self.request.user)
+        return context
 
 
 class ContactDetailView(LoginRequiredMixin, generic.DetailView):
@@ -28,13 +36,14 @@ class AddContact(LoginRequiredMixin, CreateView):
     '''Generate form for user input and check if it is valid.'''
 
     model = Contact
-    fields = '__all__'
+    fields = ['name', 'address', 'email', 'phone', 'birthday']
     success_url = reverse_lazy('contacts')
 
     def form_valid(self, form):
         '''Check if phone number is valid, because field phone is 'charfield' and may contain a letter'''
 
         pattern = r'\d{12}'
+        form.instance.author = self.request.user
         if not re.fullmatch(pattern, form.cleaned_data['phone']):
             form.add_error('phone', 'Phone number should contain only digits')
             return self.form_invalid(form)
