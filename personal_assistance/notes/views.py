@@ -17,9 +17,7 @@ from .models import Note
 class CustomLoginView(LoginView):
     """
     Display a login page.
-
     **Template:**
-
     :template:'notes/login.html'
     """
     template_name = 'login.html'
@@ -36,9 +34,7 @@ class CustomLoginView(LoginView):
 class RegisterPage(FormView):
     """
         Display a registration page.
-
         **Template:**
-
         :template:'notes/register.html'
         """
     template_name = 'register.html'
@@ -68,17 +64,11 @@ class Notes(LoginRequiredMixin, ListView):
     """
     Display notes from the database.
     Suggest actions for the notes and variants for notes representation set
-
     **Template:**
-
         :template:'notes/notes.html'
-
     **Model:**
-
         :model:'models.Note'
-
     **Context:**
-
         ''notes''
             A set of all notes in the database
     """
@@ -165,4 +155,3 @@ class NoteDelete(LoginRequiredMixin, DeleteView):
     context_object_name = 'note'
     success_url = reverse_lazy('notes')
     template_name = 'delete.html'
-

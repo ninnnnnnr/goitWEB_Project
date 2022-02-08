@@ -20,7 +20,7 @@ Address book
     <input name="q1" type="number" placeholder="Days to birthday: yyyy-mm-dd">
 </form>
 </div>
-{% if contact_list %}
+{% if all_records %}
 <table class="table" style="background-color: hsl(0.15turn, 50%, 90%)">
     <thead>
     <tr>
@@ -31,7 +31,7 @@ Address book
     </tr>
     </thead>
   <tbody>
-      {% for contact in contact_list %}
+      {% for contact in all_records %}
           <tr>
               <td><a href="{{ contact.get_absolute_url }}">{{contact.name}}</a></td>
               <td>{{ contact.birthday }}</td>
